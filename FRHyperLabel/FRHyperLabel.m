@@ -120,13 +120,17 @@ static UIColor *FRHyperLabelLinkColorHighlight;
 		CGPoint touchPoint = [touch locationInView:self];
 		NSValue *rangeValue = [self attributedTextRangeForPoint:touchPoint];
 		if (rangeValue) {
-			NSRange range = [rangeValue rangeValue];
-			NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]initWithAttributedString:self.attributedText];
-			[attributedString addAttributes:self.linkAttributeHighlight range:range];
-			
-			[UIView transitionWithView:self duration:highLightAnimationTime options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-				self.attributedText = attributedString;
-			} completion:nil];
+//            NSRange range = [rangeValue rangeValue];
+//            NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]initWithAttributedString:self.attributedText];
+//            [attributedString addAttributes:self.linkAttributeHighlight range:range];
+//
+//            [UIView transitionWithView:self duration:highLightAnimationTime options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+//                self.attributedText = attributedString;
+//            } completion:nil];
+            
+            void(^handler)(FRHyperLabel *label, NSRange selectedRange) = self.handlerDictionary[rangeValue];
+            handler(self, [rangeValue rangeValue]);
+            
 			return;
 		}
 	}
@@ -134,25 +138,25 @@ static UIColor *FRHyperLabelLinkColorHighlight;
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-	[UIView transitionWithView:self duration:highLightAnimationTime options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-		self.attributedText = self.backupAttributedText;
-	} completion:nil];
+//    [UIView transitionWithView:self duration:highLightAnimationTime options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+//        self.attributedText = self.backupAttributedText;
+//    } completion:nil];
 	[super touchesCancelled:touches withEvent:event];
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-	[UIView transitionWithView:self duration:highLightAnimationTime options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-		self.attributedText = self.backupAttributedText;
-	} completion:nil];
-	
-	for (UITouch *touch in touches) {
-		NSValue *rangeValue = [self attributedTextRangeForPoint:[touch locationInView:self]];
-		if (rangeValue) {
-			void(^handler)(FRHyperLabel *label, NSRange selectedRange) = self.handlerDictionary[rangeValue];
-			handler(self, [rangeValue rangeValue]);
-			return;
-		}
-	}
+//    [UIView transitionWithView:self duration:highLightAnimationTime options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+//        self.attributedText = self.backupAttributedText;
+//    } completion:nil];
+//
+//    for (UITouch *touch in touches) {
+//        NSValue *rangeValue = [self attributedTextRangeForPoint:[touch locationInView:self]];
+//        if (rangeValue) {
+//            void(^handler)(FRHyperLabel *label, NSRange selectedRange) = self.handlerDictionary[rangeValue];
+//            handler(self, [rangeValue rangeValue]);
+//            return;
+//        }
+//    }
 	[super touchesEnded:touches withEvent:event];
 }
 
